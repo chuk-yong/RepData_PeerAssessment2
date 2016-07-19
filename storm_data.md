@@ -1,11 +1,6 @@
----
-title: "Weather Event's Impact on Health and Ecnomics"
-author: "Chuk Yong"
-date: "19 July 2016"
-output:
-  html_document:
-    keep_md: true
----
+# Weather Event's Impact on Health and Ecnomics
+Chuk Yong  
+19 July 2016  
 
 Reproducible Research Peer Assessment 2
 
@@ -20,19 +15,34 @@ This project involves exploring the U.S. National Oceanic and Atmospheric Admini
 ### Data Processing
 
 Load and Read in the storm data set.
-```{r read, cache=TRUE}
+
+```r
 setwd("~/Desktop/Rstudio/RepData_PeerAssessment2")
 Data <- read.csv("repdata-data-StormData.csv")
 ```
 
 Load the neccessary libraries
-```{r echo=FALSE}
-library(dplyr)
-library(ggplot2)
+
+```
+## 
+## Attaching package: 'dplyr'
+```
+
+```
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+```
+
+```
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
 ```
 
 Extract data for the top 20 weather events that caused the most fatality
-```{r fatal, cache=TRUE}
+
+```r
 FataData <- Data %>% group_by(EVTYPE) %>% summarise(FATAL=sum(FATALITIES)+sum(INJURIES)) %>% arrange(desc(FATAL))
 FataDataClean <- FataData[1:20,]
 FataDataClean$EVTYPE <- factor(FataDataClean$EVTYPE, levels = FataDataClean$EVTYPE[order(FataDataClean$FATAL)])
@@ -40,7 +50,8 @@ FataDataClean$EVTYPE <- factor(FataDataClean$EVTYPE, levels = FataDataClean$EVTY
 
 Extract data for the top 20 weather events that caused the most economic damage
 
-```{r}
+
+```r
 EconData <- Data %>%
   filter(PROPDMG>0 | Data$CROPDMG>0) %>%
   select(EVTYPE,PROPDMG,PROPDMGEXP,CROPDMG,CROPDMGEXP) %>%
@@ -58,14 +69,7 @@ EconDataSum <- EconData %>% group_by(EVTYPE) %>%
 
 ###Which types of weather event were most harmful to population health?
 
-```{r plot_fatal, echo=FALSE, message=FALSE}
-plot <- ggplot(FataDataClean, aes(x=FataDataClean$EVTYPE, y=FataDataClean$FATAL)) +
-  geom_bar(stat = "identity") + 
-  # Flip the x-y so that the "Type" is easier to read
-  coord_flip() +
-  xlab("Type of Event") + ylab("Number of Fatality") + ggtitle("Top 20 Fatal Weather Events in the United States")
-plot
-```
+![](storm_data_files/figure-html/plot_fatal-1.png)<!-- -->
 
 > From the graph, the most fatal weather event was tornado. The fatality rate caused by tornado far exceeded the other weather events.
 
@@ -73,15 +77,6 @@ plot
 
 ### Which types of weather event had the greatest economic impact?
 
-```{r plot_economic_damage, echo=FALSE, message=FALSE}
-EconDataSum$EVTYPE <- factor(EconDataSum$EVTYPE, levels = EconDataSum$EVTYPE[order(EconDataSum$TOTECONDMG)])
-plot <- ggplot(EconDataSum, aes(x=EconDataSum$EVTYPE, y=EconDataSum$TOTECONDMG)) +
-  geom_bar(stat = "identity") +
-  # Flip the x-y so that the "Type" is easier to read
-  coord_flip() + 
-  xlab("") + ylab("Economic Cost ") + ggtitle("Top 20 Most Costly Weather Events (USA)")
-plot
-
-```
+![](storm_data_files/figure-html/plot_economic_damage-1.png)<!-- -->
 
 > The weather event that caused the most economic damage is flood, followed by hurricane/typhoon, tornado and storm surge.
