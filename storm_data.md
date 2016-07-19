@@ -1,16 +1,13 @@
-# Weather Event's Impact on Health and Ecnomics
+# Weather Event's Impact on Population Health and Ecnomics in United States of America
 Chuk Yong  
-19 July 2016  
+20 July 2016  
 
 Reproducible Research Peer Assessment 2
 
 ## Synopsis
 Storms and other severe weather events can cause both public health and economic problems for communities and municipalities. Many severe events can result in fatalities, injuries, and property damage, and preventing such outcomes to the extent possible is a key concern.
 
-This project involves exploring the U.S. National Oceanic and Atmospheric Administration's (NOAA) storm database to identify the following:
-
-1. Which types of weather event were most harmful to population health?
-2. Which types of weather event had the greatest economic impact?
+This project involves exploring the U.S. National Oceanic and Atmospheric Administration's (NOAA) storm database from 1950-2011.  The results suggest that the weather event most harmful to population health was tornado, while the weather event that caused the greatest economic damage was Flood.
 
 ### Data Processing
 
