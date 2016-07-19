@@ -1,0 +1,57 @@
+---
+title: "Weather Event's Impact on Health and Ecnomics"
+author: "Chuk Yong"
+date: "19 July 2016"
+output:
+  html_fragment: default
+  md_document:
+    variant: markdown_github
+    pandoc_args: "--no-wrap"
+---
+
+```{r echo=FALSE}
+library(dplyr)
+library(ggplot2)
+```
+
+Reproducible Research Peer Assessment 2
+========================================
+Author: Chuk Yong
+Date: 20 July 2016
+
+# Impact of Severe Weather Events on Public Health and Economic Impact in the United States of America
+
+## Synopsis
+Storms and other severe weather events can cause both public health and economic problems for communities and municipalities. Many severe events can result in fatalities, injuries, and property damage, and preventing such outcomes to the extent possible is a key concern.
+
+This project involves exploring the U.S. National Oceanic and Atmospheric Administration's (NOAA) storm database to identify the following:
+
+1. Which types of weather events are most harmful to population health?
+2. Which types of weather events have the greatest economic impact?
+
+### Data Processing
+
+Load and Read in the storm data set.
+```{r read, cache=TRUE}
+setwd("~/Desktop/Rstudio/RepData_PeerAssessment2")
+Data <- read.csv("repdata-data-StormData.csv")
+```
+
+Extract data for the weather event that causes the most fatality
+```{r fatal, cache=TRUE}
+FataData <- Data %>% group_by(EVTYPE) %>% summarise(FATAL=sum(FATALITIES)+sum(INJURIES)) %>% arrange(desc(FATAL))
+FataDataClean <- FataData[1:20,]
+FataDataClean$EVTYPE <- factor(FataDataClean$EVTYPE, levels = FataDataClean$EVTYPE[order(FataDataClean$FATAL)])
+```
+
+
+```{r plot_fatal, echo=FALSE, message=FALSE}
+plot <- ggplot(FataDataClean, aes(x=FataDataClean$EVTYPE, y=FataDataClean$FATAL)) +
+  geom_bar(stat = "identity") + 
+  # Flip the x-y so that the "Type" is easier to read
+  coord_flip() +
+  xlab("Type of Event") + ylab("Number of Fatality") + ggtitle("Top 20 Fatal Weather Events in the United States")
+plot
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
